@@ -1,12 +1,12 @@
 use dubpay::transaction_handler_server::{TransactionHandler, TransactionHandlerServer};
 use dubpay::{
-    ConfirmRequestRequest, ConfirmRequestResponse, ErrorMessage, RequestMoneyRequest,
-    RequestMoneyResponse, SendPaymentRequest, SendPaymentResponse, SuccessMessage,
+    ConfirmRequestRequest, ConfirmRequestResponse, RequestMoneyRequest, RequestMoneyResponse,
+    SendPaymentRequest, SendPaymentResponse,
 };
 use tonic::{transport::Server, Request, Response, Status};
 
 pub mod dubpay {
-    tonic::include_proto!("dubpay");
+    tonic::include_proto!("dubpay.transaction");
 }
 
 #[derive(Debug, Default)]
