@@ -2,7 +2,7 @@ syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
 
-package dubpay;
+package dubpay.transaction;
 
 service Transactor {
     rpc RequestMoney (RequestMoneyRequest) returns (RequestMoneyResponse);
