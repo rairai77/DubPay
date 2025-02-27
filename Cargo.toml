@@ -1,0 +1,9 @@
+[package]
+name = "dubpay"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+[workspace]
+members = ["api-gateway", "fraud-detection-service", "notification-service", "social-service", "transaction-service", "user-service", "wallet-service"]
