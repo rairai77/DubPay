@@ -1,11 +1,8 @@
-use dubpay::transaction_service_server::TransactionService;
-use dubpay::transaction_service_server::TransactionServiceServer;
+use dubpay::transaction_handler_server::{TransactionHandler, TransactionHandlerServer};
 use dubpay::{
     ConfirmRequestRequest, ConfirmRequestResponse, ErrorMessage, RequestMoneyRequest,
     RequestMoneyResponse, SendPaymentRequest, SendPaymentResponse, SuccessMessage,
 };
-use prost_types::Timestamp;
-use std::time::{SystemTime, UNIX_EPOCH};
 use tonic::{transport::Server, Request, Response, Status};
 
 pub mod dubpay {
@@ -13,10 +10,10 @@ pub mod dubpay {
 }
 
 #[derive(Debug, Default)]
-pub struct transaction_service;
+pub struct TransactionService;
 
 #[tonic::async_trait]
-impl TransactionService for transaction_service {
+impl TransactionHandler for TransactionService {
     async fn request_money(
         &self,
         request: Request<RequestMoneyRequest>,
@@ -42,12 +39,12 @@ impl TransactionService for transaction_service {
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let addr = "[::1]:50051".parse()?;
-    let service = transaction_service::default();
+    let service = TransactionService::default();
 
     println!("🚀 TransactionService listening on {}", addr);
 
     Server::builder()
-        .add_service(TransactionServiceServer::new(service))
+        .add_service(TransactionHandlerServer::new(service))
         .serve(addr)
         .await?;
 

@@ -4,7 +4,7 @@ import "google/protobuf/timestamp.proto";
 
 package dubpay;
 
-service TransactionService {
+service TransactionHandler {
     rpc RequestMoney (RequestMoneyRequest) returns (RequestMoneyResponse);
     rpc ConfirmRequest (ConfirmRequestRequest) returns (ConfirmRequestResponse);
     rpc SendPayment (SendPaymentRequest) returns (SendPaymentResponse);
