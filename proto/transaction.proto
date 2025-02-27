@@ -4,7 +4,7 @@ import "google/protobuf/timestamp.proto";
 
 package dubpay.transaction;
 
-service Transactor {
+service TransactionHandler {
     rpc RequestMoney (RequestMoneyRequest) returns (RequestMoneyResponse);
     rpc ConfirmRequest (ConfirmRequestRequest) returns (ConfirmRequestResponse);
     rpc SendPayment (SendPaymentRequest) returns (SendPaymentResponse);
@@ -21,10 +21,8 @@ message RequestMoneyRequest {
 }
 
 message RequestMoneyResponse{
-    oneof result {
-        SuccessMessage success = 1;
-        ErrorMessage error = 2;
-    }
+    string id = 1;
+    string message = 2;
 }
 
 message ConfirmRequestRequest {
@@ -33,10 +31,8 @@ message ConfirmRequestRequest {
 }
 
 message ConfirmRequestResponse {
-    oneof result {
-        SuccessMessage success = 1;
-        ErrorMessage error = 2;
-    }
+    string id = 1;
+    string message = 2;
 }
 
 message SendPaymentRequest {
@@ -48,18 +44,7 @@ message SendPaymentRequest {
 }
 
 message SendPaymentResponse {
-    oneof result {
-        SuccessMessage success = 1;
-        ErrorMessage error = 2;
-    }
-}
-
-message SuccessMessage {
     string id = 1;
     string message = 2;
 }
 
-message ErrorMessage {
-    string message = 1;
-    optional string id = 2;
-}
