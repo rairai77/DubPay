@@ -3,7 +3,20 @@ name = "dubpay"
 version = "0.1.0"
 edition = "2021"
 
-[dependencies]
-
 [workspace]
-members = ["api-gateway", "fraud-detection-service", "notification-service", "social-service", "transaction-service", "user-service", "wallet-service"]
+members = [
+    "services/api-gateway",
+    "services/fraud-detection-service",
+    "services/notification-service",
+    "services/social-service",
+    "services/transaction-service",
+    "services/user-service",
+    "services/wallet-service",
+]
+
+[workspace.dependencies]
+prost = "0.13.5"
+prost-types = "0.13.5"
+tokio = "1.43.0"
+tonic = "0.12.3"
+tonic-build = "0.12.3"
