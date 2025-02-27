@@ -23,7 +23,7 @@ message RequestMoneyRequest {
 message RequestMoneyResponse{
     oneof result {
         SuccessMessage success = 1;
-        Errormessage error = 2;
+        ErrorMessage error = 2;
     }
 }
 
@@ -35,7 +35,7 @@ message ConfirmRequestRequest {
 message ConfirmRequestResponse {
     oneof result {
         SuccessMessage success = 1;
-        Errormessage error = 2;
+        ErrorMessage error = 2;
     }
 }
 
@@ -50,7 +50,7 @@ message SendPaymentRequest {
 message SendPaymentResponse {
     oneof result {
         SuccessMessage success = 1;
-        Errormessage error = 2;
+        ErrorMessage error = 2;
     }
 }
 
