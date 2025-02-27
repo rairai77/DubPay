@@ -16,21 +16,21 @@ pub struct TransactionService;
 impl TransactionHandler for TransactionService {
     async fn request_money(
         &self,
-        request: Request<RequestMoneyRequest>,
+        _request: Request<RequestMoneyRequest>,
     ) -> Result<Response<RequestMoneyResponse>, Status> {
         Err(Status::unimplemented("Not yet implemented"))
     }
 
     async fn confirm_request(
         &self,
-        request: Request<ConfirmRequestRequest>,
+        _request: Request<ConfirmRequestRequest>,
     ) -> Result<Response<ConfirmRequestResponse>, Status> {
         Err(Status::unimplemented("Not yet implemented"))
     }
 
     async fn send_payment(
         &self,
-        request: Request<SendPaymentRequest>,
+        _request: Request<SendPaymentRequest>,
     ) -> Result<Response<SendPaymentResponse>, Status> {
         Err(Status::unimplemented("Not yet implemented"))
     }
@@ -39,7 +39,7 @@ impl TransactionHandler for TransactionService {
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let addr = "[::1]:50051".parse()?;
-    let service = TransactionService::default();
+    let service = TransactionService;
 
     println!("🚀 TransactionService listening on {}", addr);
 
