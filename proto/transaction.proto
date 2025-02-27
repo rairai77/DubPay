@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package dubpay;
+
+service Transactor {
+    rpc RequestMoney (RequestMoneyRequest) returns (RequestMoneyResponse);
+    rpc ConfirmRequest (ConfirmRequestRequest) returns (ConfirmRequestResponse);
+    rpc SendPayment (SendPaymentRequest) returns (SendPaymentResponse);
+
+}
+
+message RequestMoneyRequest {
+    string requestorUserId = 1;
+    string targetUsername = 2;
+    double amount = 3;
+    string description = 4;
+    google.protobuf.Timestamp duedate = 5;
+    bool public = 6;
+}
+
+message RequestMoneyResponse{
+    oneof result {
+        SuccessMessage success = 1;
+        Errormessage error = 2;
+    }
+}
+
+message ConfirmRequestRequest {
+    string id = 1;
+    bool public = 2;
+}
+
+message ConfirmRequestResponse {
+    oneof result {
+        SuccessMessage success = 1;
+        Errormessage error = 2;
+    }
+}
+
+message SendPaymentRequest {
+    string fromUserId = 1;
+    string toUserId = 2;
+    double amount = 3;
+    string description = 4;
+    bool public = 5;
+}
+
+message SendPaymentResponse {
+    oneof result {
+        SuccessMessage success = 1;
+        Errormessage error = 2;
+    }
+}
+
+message SuccessMessage {
+    string id = 1;
+    string message = 2;
+}
+
+message ErrorMessage {
+    string message = 1;
+    optional string id = 2;
+}
