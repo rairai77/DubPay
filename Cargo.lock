@@ -542,6 +542,13 @@ checksum = "defc4c55412d89136f966bbb339008b474350e5e6e78d2714439c386b3137a03"
 [[package]]
 name = "notification-service"
 version = "0.1.0"
+dependencies = [
+ "build-common",
+ "prost",
+ "prost-types",
+ "tokio",
+ "tonic",
+]
 
 [[package]]
 name = "object"
