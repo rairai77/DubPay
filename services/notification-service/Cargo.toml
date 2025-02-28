@@ -11,4 +11,3 @@ prost-types.workspace = true
 
 [build-dependencies]
 build-common = { path = "../../build-common" }
-
