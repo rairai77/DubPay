@@ -1,0 +1,39 @@
+# Use the pre-built rust-microservice-builder as the base image
+FROM rust-microservice-builder AS builder
+
+WORKDIR /app
+
+# ARG values (set at build time)
+ARG SERVICE_NAME
+ARG SERVICE_PORT
+
+# Copy only the service-specific source code
+COPY services/${SERVICE_NAME} ./services/${SERVICE_NAME}
+
+# Set working directory inside the service
+WORKDIR /app/services/${SERVICE_NAME}
+
+# Ensure Cargo uses the prebuilt target directory
+RUN cargo build --release --locked
+
+# Final runtime image (minimal)
+FROM debian:latest
+
+WORKDIR /app
+
+# ARG values (carried over from the build stage)
+ARG SERVICE_NAME
+ARG SERVICE_PORT
+
+# Set ENV variables so the service can access them at runtime
+ENV SERVICE_NAME=${SERVICE_NAME}
+ENV SERVICE_PORT=${SERVICE_PORT}
+
+# Copy the compiled binary
+COPY --from=builder /app/target/release/${SERVICE_NAME} /app/${SERVICE_NAME}
+
+# Expose the gRPC port dynamically
+EXPOSE ${SERVICE_PORT}
+
+# ✅ Fix: Use `sh -c` to expand the environment variable dynamically at runtime
+ENTRYPOINT ["/bin/sh", "-c", "/app/$SERVICE_NAME"]
