@@ -1,0 +1,32 @@
+# Use Rust as the build environment
+FROM rust:latest AS builder
+
+WORKDIR /app
+
+# Install protobuf-compiler (`protoc`)
+RUN apt-get update && apt-get install -y \
+    protobuf-compiler \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy only Cargo manifest files for caching
+COPY Cargo.toml Cargo.lock ./
+
+# Copy shared dependencies (build-common and proto files)
+COPY build-common ./build-common
+COPY proto ./proto
+
+# Copy all microservices inside the workspace
+COPY services ./services
+
+# Ensure Cargo detects the workspace
+ENV CARGO_WORKSPACE_DIR=/app
+WORKDIR ${CARGO_WORKSPACE_DIR}
+
+# Now run cargo fetch (after the source code is copied)
+RUN cargo fetch
+
+# Set the working directory to build-common
+WORKDIR /app/build-common
+
+# Build build-common (which includes .proto compilation)
+RUN cargo build --release

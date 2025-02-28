@@ -3,7 +3,7 @@ use dubpay::{
     AnalyzeHighValueTransactionRequest, AnalyzeHighValueTransactionResponse,
     AnalyzeTransactionRequest, AnalyzeTransactionResponse,
 };
-
+use std::env;
 use tonic::{transport::Server, Request, Response, Status};
 
 pub mod dubpay {
@@ -32,7 +32,8 @@ impl FraudDetectionHandler for FraudDetectionService {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let addr = "[::1]:50053".parse()?;
+    let port = env::var("SERVICE_PORT").unwrap_or_else(|_| "50051".to_string());
+    let addr = format!("[::1]:{}", port).parse()?;
     let service = FraudDetectionService;
 
     println!("🚀 Fraud Detection Service listening on {}", addr);

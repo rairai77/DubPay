@@ -1,0 +1,83 @@
+services:
+  rust-microservice-builder:
+    build:
+      context: .
+      dockerfile: Dockerfile.build
+    image: rust-microservice-builder
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: services/api-gateway/Dockerfile
+    depends_on:
+      - rust-microservice-builder
+    environment:
+      - SERVICE_PORT=50051
+    ports:
+      - "50051:50051"
+
+  fraud-detection-service:
+    build:
+      context: .
+      dockerfile: services/fraud-detection-service/Dockerfile
+    depends_on:
+      - rust-microservice-builder
+    environment:
+      - SERVICE_PORT=50052
+    ports:
+      - "50052:50052"
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: services/notification-service/Dockerfile
+    depends_on:
+      - rust-microservice-builder
+    environment:
+      - SERVICE_PORT=50053
+    ports:
+      - "50053:50053"
+
+  social-service:
+    build:
+      context: .
+      dockerfile: services/social-service/Dockerfile
+    depends_on:
+      - rust-microservice-builder
+    environment:
+      - SERVICE_PORT=50054
+    ports:
+      - "50054:50054"
+
+  transaction-service:
+    build:
+      context: .
+      dockerfile: services/transaction-service/Dockerfile
+    depends_on:
+      - rust-microservice-builder
+    environment:
+      - SERVICE_PORT=50055
+    ports:
+      - "50055:50055"
+
+  user-service:
+    build:
+      context: .
+      dockerfile: services/user-service/Dockerfile
+    depends_on:
+      - rust-microservice-builder
+    environment:
+      - SERVICE_PORT=50056
+    ports:
+      - "50056:50056"
+
+  wallet-service:
+    build:
+      context: .
+      dockerfile: services/wallet-service/Dockerfile
+    depends_on:
+      - rust-microservice-builder
+    environment:
+      - SERVICE_PORT=50057
+    ports:
+      - "50057:50057"

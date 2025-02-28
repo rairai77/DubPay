@@ -166,6 +166,10 @@ checksum = "8f68f53c83ab957f72c32642f3868eec03eb974d1fb82e453128456482613d36"
 name = "build-common"
 version = "0.1.0"
 dependencies = [
+ "prost",
+ "prost-types",
+ "tokio",
+ "tonic",
  "tonic-build",
 ]
 
@@ -186,10 +190,6 @@ name = "cfg-if"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
-
-[[package]]
-name = "dubpay"
-version = "0.1.0"
 
 [[package]]
 name = "either"

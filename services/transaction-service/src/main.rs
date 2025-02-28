@@ -3,6 +3,7 @@ use dubpay::{
     ConfirmRequestRequest, ConfirmRequestResponse, RequestMoneyRequest, RequestMoneyResponse,
     SendPaymentRequest, SendPaymentResponse,
 };
+use std::env;
 use tonic::{transport::Server, Request, Response, Status};
 
 pub mod dubpay {
@@ -38,7 +39,8 @@ impl TransactionHandler for TransactionService {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let addr = "[::1]:50051".parse()?;
+    let port = env::var("SERVICE_PORT").unwrap_or_else(|_| "50051".to_string());
+    let addr = format!("[::1]:{}", port).parse()?;
     let service = TransactionService;
 
     println!("🚀 TransactionService listening on {}", addr);
