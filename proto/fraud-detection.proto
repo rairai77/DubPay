@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package dubpay.fraud_detection;
+
+service FraudDetectionHandler {
+    rpc AnalyzeTransaction (AnalyzeTransactionRequest) returns (AnalyzeTransactionResponse);    
+    rpc AnalyzeHighValueTransaction (AnalyzeHighValueTransactionRequest) returns (AnalyzeHighValueTransactionResponse);
+}
+
+message AnalyzeTransactionRequest {
+    string transactionId = 1;
+    string senderUserId = 2;
+    string recipientUserId = 3;
+    double amount = 4;
+}
+
+message AnalyzeTransactionResponse {
+    string transactionId = 1;
+    string message = 2;
+    int64 score = 3;
+}
+
+message AnalyzeHighValueTransactionRequest {
+    string transactionId = 1;
+    string senderUserId = 2;
+    string recipientUserId = 3;
+    double amount = 4;
+}
+
+message AnalyzeHighValueTransactionResponse {
+    string transactionId = 1;
+    string message = 2;
+    int64 score = 3;
+}
