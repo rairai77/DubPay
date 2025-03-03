@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+package dubpay.social_service;
+
+service SocialServiceHandler {
+    rpc AddFriend (AddFriendRequest) returns (AddFriendResponse);
+    rpc GetActivityFeed (GetActivityFeedRequest) returns (GetActivityFeedResponse);
+    rpc CheckFriendConnections (CheckFriendConnectionsRequest) returns (CheckFriendConnectionsResponse);
+    rpc AddToActivityFeed (AddToActivityFeedRequest) returns (AddToActivityFeedResponse);
+    rpc GetFriendRecommendations (GetFriendRecommendationsRequest) returns (GetFriendRecommendationsResponse);
+}
+
+message AddFriendRequest {
+    string user_id = 1;
+    string target_username = 2;
+}
+
+message AddFriendResponse {
+    bool success = 1;
+    string message = 2;
+}
+
+message GetActivityFeedRequest {
+    string user_id = 1;
+    int32 page = 2;
+    int32 page_size = 3;
+    map<string, string> filters = 4;
+}
+
+message GetActivityFeedResponse {
+    repeated ActivityItem feed = 1;
+    PaginationInfo pagination = 2;
+}
+
+message ActivityItem {
+    string type = 1;
+    string description = 2;
+    string timestamp = 3;
+    map<string, string> metadata = 4;
+}
+
+message PaginationInfo {
+    int32 current_page = 1;
+    int32 page_size = 2;
+    int32 total_items = 3;
+}
+
+message CheckFriendConnectionsRequest {
+    string user_id_1 = 1;
+    string user_id_2 = 2;
+}
+
+message CheckFriendConnectionsResponse {
+    bool are_friends = 1;
+}
+
+message AddToActivityFeedRequest {
+    string user_id = 1;
+    string target_user_id = 2;
+    ActivityItem activity = 3;
+}
+
+message AddToActivityFeedResponse {
+    bool success = 1;
+}
+
+message GetFriendRecommendationsRequest {
+    string user_id = 1;
+}
+
+message GetFriendRecommendationsResponse {
+    repeated string recommended_user_ids = 1;
+}
