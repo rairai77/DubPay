@@ -14,7 +14,7 @@ WithdrawFunds (optional) – Allows users to withdraw funds from their wallet.
 
 */
 
-service WalletService {
+service Wallet {
     rpc CreateWallet(CreateWalletRequest) returns (CreateWalletResponse);
     rpc GetBalance(GetBalanceRequest) returns (GetBalanceResponse);
     rpc TransferFunds(TransferFundsRequest) returns (TransferFundsResponse);

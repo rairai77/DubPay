@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package dubpay.user-service;
 
-service UserService {
+service User {
     rpc RegisterUser(RegisterUserRequest) returns (RegisterUserResponse);
     rpc AuthenticateUser(AuthenticateUserRequest) returns (AuthenticateUserResponse);
     rpc GetUserProfile(GetUserProfileRequest) returns (GetUserProfileResponse);
