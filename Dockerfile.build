@@ -1,32 +1,91 @@
-# Use Rust as the build environment
-FROM rust:latest AS builder
+# Use a recent Rust version
+FROM rust:1.85-slim-bookworm AS builder
 
 WORKDIR /app
 
-# Install protobuf-compiler (`protoc`)
-RUN apt-get update && apt-get install -y \
+# Install protobuf-compiler with standard includes and other essential tools
+RUN apt-get update && apt-get install -y --no-install-recommends \
     protobuf-compiler \
+    libprotobuf-dev \
+    build-essential \
+    pkg-config \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy only Cargo manifest files for caching
+# Copy manifest files first to leverage caching
 COPY Cargo.toml Cargo.lock ./
+COPY build-common/Cargo.toml ./build-common/
 
-# Copy shared dependencies (build-common and proto files)
-COPY build-common ./build-common
-COPY proto ./proto
+# First, create all the service directories
+RUN mkdir -p services/api-gateway \
+    services/fraud-detection-service \
+    services/notification-service \
+    services/social-service \
+    services/transaction-service \
+    services/user-service \
+    services/wallet-service
 
-# Copy all microservices inside the workspace
-COPY services ./services
+# Now copy the Cargo.toml files into their respective directories
+COPY services/api-gateway/Cargo.toml ./services/api-gateway/
+COPY services/fraud-detection-service/Cargo.toml ./services/fraud-detection-service/
+COPY services/notification-service/Cargo.toml ./services/notification-service/
+COPY services/social-service/Cargo.toml ./services/social-service/
+COPY services/transaction-service/Cargo.toml ./services/transaction-service/
+COPY services/user-service/Cargo.toml ./services/user-service/
+COPY services/wallet-service/Cargo.toml ./services/wallet-service/
 
-# Ensure Cargo detects the workspace
-ENV CARGO_WORKSPACE_DIR=/app
-WORKDIR ${CARGO_WORKSPACE_DIR}
+# Create dummy source files for all workspace members
+RUN mkdir -p build-common/src && \
+    echo 'pub fn compile_protos(_: &str) {}' > build-common/src/lib.rs && \
+    mkdir -p services/api-gateway/src && \
+    echo 'fn main() { println!("Dummy"); }' > services/api-gateway/src/main.rs && \
+    echo 'fn main() {}' > services/api-gateway/build.rs && \
+    mkdir -p services/fraud-detection-service/src && \
+    echo 'fn main() { println!("Dummy"); }' > services/fraud-detection-service/src/main.rs && \
+    echo 'fn main() {}' > services/fraud-detection-service/build.rs && \
+    mkdir -p services/notification-service/src && \
+    echo 'fn main() { println!("Dummy"); }' > services/notification-service/src/main.rs && \
+    echo 'fn main() {}' > services/notification-service/build.rs && \
+    mkdir -p services/social-service/src && \
+    echo 'fn main() { println!("Dummy"); }' > services/social-service/src/main.rs && \
+    echo 'fn main() {}' > services/social-service/build.rs && \
+    mkdir -p services/transaction-service/src && \
+    echo 'fn main() { println!("Dummy"); }' > services/transaction-service/src/main.rs && \
+    echo 'fn main() {}' > services/transaction-service/build.rs && \
+    mkdir -p services/user-service/src && \
+    echo 'fn main() { println!("Dummy"); }' > services/user-service/src/main.rs && \
+    echo 'fn main() {}' > services/user-service/build.rs && \
+    mkdir -p services/wallet-service/src && \
+    echo 'fn main() { println!("Dummy"); }' > services/wallet-service/src/main.rs && \
+    echo 'fn main() {}' > services/wallet-service/build.rs
 
-# Now run cargo fetch (after the source code is copied)
+# Add workspace.resolver = "2" to Cargo.toml if it's not already there
+RUN if ! grep -q "resolver = \"2\"" Cargo.toml; then \
+      sed -i '/\[workspace\]/a resolver = "2"' Cargo.toml; \
+    fi
+
+# Fetch all dependencies
 RUN cargo fetch
 
-# Set the working directory to build-common
-WORKDIR /app/build-common
+# Now copy the actual source code
+COPY build-common/src ./build-common/src/
+COPY proto ./proto
 
-# Build build-common (which includes .proto compilation)
+# Copy build scripts and service source code
+COPY services/api-gateway/build.rs ./services/api-gateway/
+COPY services/api-gateway/src ./services/api-gateway/src/
+COPY services/fraud-detection-service/build.rs ./services/fraud-detection-service/
+COPY services/fraud-detection-service/src ./services/fraud-detection-service/src/
+COPY services/notification-service/build.rs ./services/notification-service/
+COPY services/notification-service/src ./services/notification-service/src/
+COPY services/social-service/build.rs ./services/social-service/
+COPY services/social-service/src ./services/social-service/src/
+COPY services/transaction-service/build.rs ./services/transaction-service/
+COPY services/transaction-service/src ./services/transaction-service/src/
+COPY services/user-service/build.rs ./services/user-service/
+COPY services/user-service/src ./services/user-service/src/
+COPY services/wallet-service/build.rs ./services/wallet-service/
+COPY services/wallet-service/src ./services/wallet-service/src/
+
+# Build the common code first
+WORKDIR /app/build-common
 RUN cargo build --release

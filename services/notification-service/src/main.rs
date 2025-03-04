@@ -23,7 +23,7 @@ impl NotificationHandler for NotificationService {
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let port = env::var("SERVICE_PORT").unwrap_or_else(|_| "50051".to_string());
-    let addr = format!("[::1]:{}", port).parse()?;
+    let addr = format!("0.0.0.0:{}", port).parse()?;
     let service = NotificationService;
 
     println!("🚀 NotificationService listening on {}", addr);

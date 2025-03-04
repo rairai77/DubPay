@@ -1,4 +1,5 @@
 version: "3.9"
+
 services:
   api-gateway:
     build:
@@ -6,12 +7,20 @@ services:
       dockerfile: Dockerfile.service
       args:
         SERVICE_NAME: api-gateway
-        SERVICE_PORT: 50051
     environment:
       - SERVICE_NAME=api-gateway
       - SERVICE_PORT=50051
     ports:
       - "50051:50051"
+    networks:
+      - dubpay-network
+    depends_on:
+      - fraud-detection-service
+      - notification-service
+      - social-service
+      - transaction-service
+      - user-service
+      - wallet-service
 
   fraud-detection-service:
     build:
@@ -19,12 +28,13 @@ services:
       dockerfile: Dockerfile.service
       args:
         SERVICE_NAME: fraud-detection-service
-        SERVICE_PORT: 50052
     environment:
       - SERVICE_NAME=fraud-detection-service
-      - SERVICE_PORT=50052
+      - SERVICE_PORT=50051
     ports:
-      - "50052:50052"
+      - "50052:50051"
+    networks:
+      - dubpay-network
 
   notification-service:
     build:
@@ -32,12 +42,13 @@ services:
       dockerfile: Dockerfile.service
       args:
         SERVICE_NAME: notification-service
-        SERVICE_PORT: 50053
     environment:
       - SERVICE_NAME=notification-service
-      - SERVICE_PORT=50053
+      - SERVICE_PORT=50051
     ports:
-      - "50053:50053"
+      - "50053:50051"
+    networks:
+      - dubpay-network
 
   social-service:
     build:
@@ -45,12 +56,15 @@ services:
       dockerfile: Dockerfile.service
       args:
         SERVICE_NAME: social-service
-        SERVICE_PORT: 50054
     environment:
       - SERVICE_NAME=social-service
-      - SERVICE_PORT=50054
+      - SERVICE_PORT=50051
     ports:
-      - "50054:50054"
+      - "50054:50051"
+    networks:
+      - dubpay-network
+    depends_on:
+      - user-service
 
   transaction-service:
     build:
@@ -58,12 +72,17 @@ services:
       dockerfile: Dockerfile.service
       args:
         SERVICE_NAME: transaction-service
-        SERVICE_PORT: 50055
     environment:
       - SERVICE_NAME=transaction-service
-      - SERVICE_PORT=50055
+      - SERVICE_PORT=50051
     ports:
-      - "50055:50055"
+      - "50055:50051"
+    networks:
+      - dubpay-network
+    depends_on:
+      - wallet-service
+      - fraud-detection-service
+      - notification-service
 
   user-service:
     build:
@@ -71,12 +90,13 @@ services:
       dockerfile: Dockerfile.service
       args:
         SERVICE_NAME: user-service
-        SERVICE_PORT: 50056
     environment:
       - SERVICE_NAME=user-service
-      - SERVICE_PORT=50056
+      - SERVICE_PORT=50051
     ports:
-      - "50056:50056"
+      - "50056:50051"
+    networks:
+      - dubpay-network
 
   wallet-service:
     build:
@@ -84,9 +104,16 @@ services:
       dockerfile: Dockerfile.service
       args:
         SERVICE_NAME: wallet-service
-        SERVICE_PORT: 50057
     environment:
       - SERVICE_NAME=wallet-service
-      - SERVICE_PORT=50057
+      - SERVICE_PORT=50051
     ports:
-      - "50057:50057"
+      - "50057:50051"
+    networks:
+      - dubpay-network
+    depends_on:
+      - user-service
+
+networks:
+  dubpay-network:
+    driver: bridge

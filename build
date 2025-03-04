@@ -1,2 +1,10 @@
 #!/bin/bash
+set -e
+
+# Build the base image with all dependencies
+echo "Building base builder image..."
 docker build -t rust-microservice-builder -f Dockerfile.build .
+
+# Build the services in parallel
+echo "Building services..."
+docker compose build --parallel
