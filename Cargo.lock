@@ -888,7 +888,6 @@ version = "0.1.0"
 dependencies = [
  "build-common",
  "prost",
- "prost-types",
  "tokio",
  "tonic",
 ]

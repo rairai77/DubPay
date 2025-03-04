@@ -7,7 +7,6 @@ edition = "2021"
 tokio.workspace = true
 tonic.workspace = true
 prost.workspace = true
-prost-types.workspace = true
 
 [build-dependencies]
 build-common = { path = "../../build-common" }
