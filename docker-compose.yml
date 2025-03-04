@@ -1,0 +1,92 @@
+version: "3.9"
+services:
+  api-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile.service
+      args:
+        SERVICE_NAME: api-gateway
+        SERVICE_PORT: 50051
+    environment:
+      - SERVICE_NAME=api-gateway
+      - SERVICE_PORT=50051
+    ports:
+      - "50051:50051"
+
+  fraud-detection-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.service
+      args:
+        SERVICE_NAME: fraud-detection-service
+        SERVICE_PORT: 50052
+    environment:
+      - SERVICE_NAME=fraud-detection-service
+      - SERVICE_PORT=50052
+    ports:
+      - "50052:50052"
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.service
+      args:
+        SERVICE_NAME: notification-service
+        SERVICE_PORT: 50053
+    environment:
+      - SERVICE_NAME=notification-service
+      - SERVICE_PORT=50053
+    ports:
+      - "50053:50053"
+
+  social-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.service
+      args:
+        SERVICE_NAME: social-service
+        SERVICE_PORT: 50054
+    environment:
+      - SERVICE_NAME=social-service
+      - SERVICE_PORT=50054
+    ports:
+      - "50054:50054"
+
+  transaction-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.service
+      args:
+        SERVICE_NAME: transaction-service
+        SERVICE_PORT: 50055
+    environment:
+      - SERVICE_NAME=transaction-service
+      - SERVICE_PORT=50055
+    ports:
+      - "50055:50055"
+
+  user-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.service
+      args:
+        SERVICE_NAME: user-service
+        SERVICE_PORT: 50056
+    environment:
+      - SERVICE_NAME=user-service
+      - SERVICE_PORT=50056
+    ports:
+      - "50056:50056"
+
+  wallet-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.service
+      args:
+        SERVICE_NAME: wallet-service
+        SERVICE_PORT: 50057
+    environment:
+      - SERVICE_NAME=wallet-service
+      - SERVICE_PORT=50057
+    ports:
+      - "50057:50057"
