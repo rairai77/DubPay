@@ -1,0 +1,90 @@
+syntax = "proto3";
+
+import "transaction.proto";
+
+package dubpay.wallet;
+
+/* 
+CreateWallet – Initializes a new wallet for a user.
+GetBalance – Retrieves the balance of a user’s wallet.
+TransferFunds – Handles transfers between wallets.
+GetTransactionHistory – Returns the transaction history of a user.
+DepositFunds (optional) – Allows users to add funds to their wallet.
+WithdrawFunds (optional) – Allows users to withdraw funds from their wallet.
+
+*/
+
+service Wallet {
+    rpc CreateWallet(CreateWalletRequest) returns (CreateWalletResponse);
+    rpc GetBalance(GetBalanceRequest) returns (GetBalanceResponse);
+    rpc TransferFunds(TransferFundsRequest) returns (TransferFundsResponse);
+    rpc GetTransactionHistory(GetTransactionHistoryRequest) returns (GetTransactionHistoryResponse);
+    rpc DepositFunds(DepositFundsRequest) returns (DepositFundsResponse);
+    rpc WithdrawFunds(WithdrawFundsRequest) returns (WithdrawFundsResponse);
+}
+
+message CreateWalletRequest {
+    string user_id = 1;
+}
+
+message CreateWalletResponse {
+    string wallet_id = 1;
+    string user_id = 2;
+    double balance = 3;
+}
+
+message GetBalanceRequest {
+    string user_id = 1;
+}
+
+message GetBalanceResponse {
+    double balance = 1;
+}
+
+message TransferFundsRequest {
+    string sender_id = 1;
+    string receiver_id = 2;
+    double amount = 3;
+    string description = 4;
+}
+
+message TransferFundsResponse {
+    bool success = 1;
+    string transaction_id = 2;
+    string message = 3;
+}
+
+message GetTransactionHistoryRequest {
+    string user_id;
+    int32 limit = 2;
+    int32 offset = 3;
+    optional string start_date = 4;
+    optional string end_date = 5;
+    optional string transaction_type = 6;
+}
+
+message GetTransactionHistoryResponse {
+    repeated Transaction transactions = 1;
+    int32 total_transactions = 2;
+}
+
+message DepositFundsRequest {
+    string user_id = 1;
+    double amount = 2;
+}
+
+message DepositFundsResponse {
+    bool success = 1;
+    double new_balance = 2;
+}
+
+message WithdrawFundsRequest {
+    string user_id = 1;
+    double amount = 2;
+}
+
+message WithdrawFundsResponse {
+    bool success = 1;
+    double new_balance = 2;
+}
+

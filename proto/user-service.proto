@@ -1,0 +1,90 @@
+syntax = "proto3";
+
+package dubpay.user-service;
+
+service User {
+    rpc RegisterUser(RegisterUserRequest) returns (RegisterUserResponse);
+    rpc AuthenticateUser(AuthenticateUserRequest) returns (AuthenticateUserResponse);
+    rpc GetUserProfile(GetUserProfileRequest) returns (GetUserProfileResponse);
+    rpc UpdateUserProfile(UpdateUserProfileRequest) returns (UpdateUserProfileResponse);
+    rpc GetUserByID(GetUserByIDRequest) returns (GetUserByIDResponse);
+    rpc GetUserByUsername(GetUserByUsernameRequest) returns (GetUserByUsernameResponse);
+    rpc CheckIfUserExists(CheckIfUserExistsRequest) returns (CheckIfUserExistsResponse);
+    rpc GetNotificationPreferences(GetNotificationPreferencesRequest) returns (GetNotificationPreferencesResponse);
+    rpc GetPrivacySettings(GetPrivacySettingsRequest) returns (GetPrivacySettingsResponse);
+}
+
+message RegisterUserRequest {
+    string username = 1;
+    string email = 2;
+    string password = 3;
+    string phone_number = 4;
+}
+
+message RegisterUserResponse {
+    string user_id = 1;
+    string token = 2;
+    string message = 3;
+}
+
+message AuthenticateUserRequest {
+    string username = 1;
+    string password = 1;
+}
+
+message AuthenticateUserResponse {
+    string token = 1;
+    string message = 2;
+}
+
+message GetUserProfileRequest {
+    string user_id = 1;
+}
+
+message GetUserProfileResponse {
+    string user_id = 1;
+    string username = 2;
+    string email = 3;
+    string phone_number = 4;
+    optional string bio = 5;
+    optional string profile_picture_url = 6;
+}
+
+mesage GetUserByUsernameRequest {
+    string usernmae = 1;
+}
+
+message GetUserByUsernameResponse {
+    string user_id = 1;
+    string username = 2;
+    string email = 3;
+    string phone_number = 4;
+}
+
+message CheckIfUserExistsRequest {
+    optional string username = 1;
+    optional string email = 2;
+}
+
+mesage CheckIfUserExistsResponse {
+    bool exists = 1;
+}
+
+message GetNotificationPreferencesRequest {
+    string user_id = 1;
+}
+
+message GetNotificationPreferencesResponse {
+    bool send_email = 1;
+    bool send_push = 2;
+    bool send_sms = 3;
+}
+
+message GetPrivacySettingsRequest {
+    string user_id = 1;
+}
+
+mesage GetPrivacySettingsResponse {
+    string friend_requests_from = 1;
+}
+
