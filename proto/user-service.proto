@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package dubpay.user-service;
+package dubpay.user_service;
 
 service User {
     rpc RegisterUser(RegisterUserRequest) returns (RegisterUserResponse);
@@ -29,7 +29,7 @@ message RegisterUserResponse {
 
 message AuthenticateUserRequest {
     string username = 1;
-    string password = 1;
+    string password = 2;
 }
 
 message AuthenticateUserResponse {
@@ -50,7 +50,7 @@ message GetUserProfileResponse {
     optional string profile_picture_url = 6;
 }
 
-mesage GetUserByUsernameRequest {
+message GetUserByUsernameRequest {
     string usernmae = 1;
 }
 
@@ -66,7 +66,7 @@ message CheckIfUserExistsRequest {
     optional string email = 2;
 }
 
-mesage CheckIfUserExistsResponse {
+message CheckIfUserExistsResponse {
     bool exists = 1;
 }
 
@@ -84,7 +84,24 @@ message GetPrivacySettingsRequest {
     string user_id = 1;
 }
 
-mesage GetPrivacySettingsResponse {
+message GetPrivacySettingsResponse {
     string friend_requests_from = 1;
 }
 
+// TODO: THIS IS A VERY TEMPORARY FIX JUST SO I CAN COMPILE
+
+message UpdateUserProfileRequest {
+    string user_id = 1;
+}
+
+message UpdateUserProfileResponse {
+    string message = 1;
+}       
+
+message GetUserByIDRequest {
+    string user_id = 1;
+}
+
+message GetUserByIDResponse {
+    string user_id = 1;
+}

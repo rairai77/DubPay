@@ -2,85 +2,82 @@ use tonic::{transport::Server, Request, Response, Status};
 
 use dubpay::user_server::{User, UserServer};
 use dubpay::{
-    RegisterUserRequest, RegisterUserResponse,
-    AuthenticateUserRequest, AuthenticateUserResponse,
-    GetUserProfileRequest, GetUserProfileResponse,
+    AuthenticateUserRequest, AuthenticateUserResponse, CheckIfUserExistsRequest,
+    CheckIfUserExistsResponse, GetNotificationPreferencesRequest,
+    GetNotificationPreferencesResponse, GetPrivacySettingsRequest, GetPrivacySettingsResponse,
+    GetUserByIdRequest, GetUserByIdResponse, GetUserByUsernameRequest, GetUserByUsernameResponse,
+    GetUserProfileRequest, GetUserProfileResponse, RegisterUserRequest, RegisterUserResponse,
     UpdateUserProfileRequest, UpdateUserProfileResponse,
-    GetUserByIDRequest, GetUserByIDResponse,
-    GetUserByUsernameRequest, GetUserByUsernameResponse,
-    CheckIfUserExistsRequest, CheckIfUserExistsResponse,
-    GetNotificationPreferencesRequest, GetNotificationPreferencesResponse,
-    GetPrivacySettingsRequest, GetPrivacySettingsResponse
 };
 
-pub mod user_server {
-    tonic::include_proto!("dubpay.user-service");
+pub mod dubpay {
+    tonic::include_proto!("dubpay.user_service");
 }
 
 #[derive(Debug, Default)]
 pub struct UserService;
 
 #[tonic::async_trait]
-impl Wallet for UserService {
+impl User for UserService {
     async fn register_user(
         &self,
-        _request: Request<RegisterUserRequest>, 
+        _request: Request<RegisterUserRequest>,
     ) -> Result<Response<RegisterUserResponse>, Status> {
         Err(Status::unimplemented("Not yet implemented"))
     }
 
-    async fn auth_user(
+    async fn authenticate_user(
         &self,
-        _request: Request<AuthenticateUserRequest>, 
+        _request: Request<AuthenticateUserRequest>,
     ) -> Result<Response<AuthenticateUserResponse>, Status> {
         Err(Status::unimplemented("Not yet implemented"))
     }
 
     async fn get_user_profile(
         &self,
-        _request: Request<GetUserProfileRequest>, 
+        _request: Request<GetUserProfileRequest>,
     ) -> Result<Response<GetUserProfileResponse>, Status> {
         Err(Status::unimplemented("Not yet implemented"))
     }
 
     async fn update_user_profile(
         &self,
-        _request: Request<UpdateUserProfileRequest>, 
+        _request: Request<UpdateUserProfileRequest>,
     ) -> Result<Response<UpdateUserProfileResponse>, Status> {
         Err(Status::unimplemented("Not yet implemented"))
     }
 
     async fn get_user_by_id(
         &self,
-        _request: Request<GetUserByIDRequest>, 
-    ) -> Result<Response<GetUserByIDResponse>, Status> {
+        _request: Request<GetUserByIdRequest>,
+    ) -> Result<Response<GetUserByIdResponse>, Status> {
         Err(Status::unimplemented("Not yet implemented"))
     }
 
     async fn get_user_by_username(
         &self,
-        _request: Request<GetUserByUsernameRequest>, 
+        _request: Request<GetUserByUsernameRequest>,
     ) -> Result<Response<GetUserByUsernameResponse>, Status> {
         Err(Status::unimplemented("Not yet implemented"))
     }
 
-    async fn user_exists(
+    async fn check_if_user_exists(
         &self,
-        _request: Request<CheckIfUserExistsRequest>, 
+        _request: Request<CheckIfUserExistsRequest>,
     ) -> Result<Response<CheckIfUserExistsResponse>, Status> {
         Err(Status::unimplemented("Not yet implemented"))
     }
 
-    async fn get_notifications_preferences(
+    async fn get_notification_preferences(
         &self,
-        _request: Request<GetNotificationPreferencesRequest>, 
+        _request: Request<GetNotificationPreferencesRequest>,
     ) -> Result<Response<GetNotificationPreferencesResponse>, Status> {
         Err(Status::unimplemented("Not yet implemented"))
     }
 
     async fn get_privacy_settings(
         &self,
-        _request: Request<GetPrivacySettingsRequest>, 
+        _request: Request<GetPrivacySettingsRequest>,
     ) -> Result<Response<GetPrivacySettingsResponse>, Status> {
         Err(Status::unimplemented("Not yet implemented"))
     }
@@ -100,5 +97,3 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     Ok(())
 }
-
-

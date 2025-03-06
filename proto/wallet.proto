@@ -1,7 +1,5 @@
 syntax = "proto3";
 
-import "proto/transaction.proto";
-
 package dubpay.wallet;
 
 /* 
@@ -88,3 +86,9 @@ message WithdrawFundsResponse {
     double new_balance = 2;
 }
 
+
+// TODO: THIS IS A VERY TEMPORARY FIX JUST SO I CAN COMPILE
+
+message Transaction {
+    string id = 1;
+}
