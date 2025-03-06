@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-import "transaction.proto";
+import "proto/transaction.proto";
 
 package dubpay.wallet;
 
@@ -55,7 +55,7 @@ message TransferFundsResponse {
 }
 
 message GetTransactionHistoryRequest {
-    string user_id;
+    string user_id = 1;
     int32 limit = 2;
     int32 offset = 3;
     optional string start_date = 4;
