@@ -14,9 +14,22 @@ pub struct NotificationService;
 impl NotificationHandler for NotificationService {
     async fn send_notification(
         &self,
-        _request: Request<SendNotificationRequest>,
+        request: Request<SendNotificationRequest>,
     ) -> Result<Response<SendNotificationResponse>, Status> {
-        Err(Status::unimplemented("Not yet implemented"))
+        let request_content = request.into_inner();
+        let user = request_content.user_id;
+        let message = request_content.message;
+        let timestamp = request_content.timestamp.unwrap();
+
+        println!(
+            "Sending notification to user {} at {} with message: {}",
+            user, timestamp, message
+        );
+
+        return Ok(Response::new(SendNotificationResponse {
+            id: "1".to_string(),
+            message: "success".to_string(),
+        }));
     }
 }
 
