@@ -10,7 +10,7 @@ WORKDIR /app
 COPY services/${SERVICE_NAME} ./services/${SERVICE_NAME}
 
 # Build only the specific service
-RUN cargo build --release --package ${SERVICE_NAME}
+RUN cargo build --package ${SERVICE_NAME}
 
 # Final runtime image (minimal)
 FROM debian:bookworm-slim
@@ -31,7 +31,7 @@ ENV SERVICE_NAME=${SERVICE_NAME}
 ENV SERVICE_PORT=${SERVICE_PORT}
 
 # Copy only the compiled binary
-COPY --from=builder /app/target/release/${SERVICE_NAME} /app/${SERVICE_NAME}
+COPY --from=builder /app/target/debug/${SERVICE_NAME} /app/${SERVICE_NAME}
 
 # Expose the gRPC port
 EXPOSE ${SERVICE_PORT}

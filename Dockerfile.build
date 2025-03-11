@@ -60,7 +60,7 @@ RUN mkdir -p build-common/src && \
 
 # Add workspace.resolver = "2" to Cargo.toml if it's not already there
 RUN if ! grep -q "resolver = \"2\"" Cargo.toml; then \
-      sed -i '/\[workspace\]/a resolver = "2"' Cargo.toml; \
+    sed -i '/\[workspace\]/a resolver = "2"' Cargo.toml; \
     fi
 
 # Fetch all dependencies
@@ -88,4 +88,4 @@ COPY services/wallet-service/src ./services/wallet-service/src/
 
 # Build the common code first
 WORKDIR /app/build-common
-RUN cargo build --release
+RUN cargo build
