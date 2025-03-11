@@ -1,14 +1,22 @@
-use dubpay::transaction_handler_server::{TransactionHandler, TransactionHandlerServer};
-use dubpay::{
-    notification_handler_client, ConfirmRequestRequest, ConfirmRequestResponse,
-    RequestMoneyRequest, RequestMoneyResponse, SendPaymentRequest, SendPaymentResponse,
+use notification_stubs::{
+    notification_handler_client::NotificationHandlerClient, SendNotificationRequest,
 };
 use std::env;
 use tonic::{transport::Server, Request, Response, Status};
+use transaction_stubs::transaction_handler_server::{TransactionHandler, TransactionHandlerServer};
+use transaction_stubs::{
+    ConfirmRequestRequest, ConfirmRequestResponse, RequestMoneyRequest, RequestMoneyResponse,
+    SendPaymentRequest, SendPaymentResponse,
+};
 
-pub mod dubpay {
+pub mod transaction_stubs {
     tonic::include_proto!("dubpay.transaction");
+}
+pub mod notification_stubs {
     tonic::include_proto!("dubpay.notification");
+}
+pub mod wallet_stubs {
+    tonic::include_proto!("dubpay.wallet");
 }
 
 #[derive(Debug, Default)]
@@ -42,18 +50,16 @@ impl TransactionHandler for TransactionService {
         let description = request_content.description;
 
         println!(
-            "Received payment request from {} to {} for {}, public: {}, description: {}",
+            "Requesting transfer of funds from from {} to {} for {}, public: {}, description: {}",
             from, to, amount, public, description
         );
 
         let mut notification_handler_client =
-            notification_handler_client::NotificationHandlerClient::connect(
-                "http://notification-service:50051",
-            )
-            .await
-            .unwrap();
+            NotificationHandlerClient::connect("http://notification-service:50051")
+                .await
+                .unwrap();
 
-        let notification_request = tonic::Request::new(dubpay::SendNotificationRequest {
+        let notification_request = tonic::Request::new(SendNotificationRequest {
             user_id: to,
             message: format!("You received a payment of {} from {}", amount, from),
             timestamp: Some(prost_types::Timestamp {
