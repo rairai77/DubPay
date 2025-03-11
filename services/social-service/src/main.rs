@@ -1,8 +1,8 @@
 use dubpay::social_service_handler_server::{SocialServiceHandler, SocialServiceHandlerServer};
 use dubpay::{
-    AddFriendRequest, AddFriendResponse, GetActivityFeedRequest, GetActivityFeedResponse,
-    CheckFriendConnectionsRequest, CheckFriendConnectionsResponse, AddToActivityFeedRequest,
-    AddToActivityFeedResponse, GetFriendRecommendationsRequest, GetFriendRecommendationsResponse,
+    AddFriendRequest, AddFriendResponse, AddToActivityFeedRequest, AddToActivityFeedResponse,
+    CheckFriendConnectionsRequest, CheckFriendConnectionsResponse, GetActivityFeedRequest,
+    GetActivityFeedResponse, GetFriendRecommendationsRequest, GetFriendRecommendationsResponse,
 };
 use std::env;
 use tonic::{transport::Server, Request, Response, Status};
