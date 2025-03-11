@@ -2,11 +2,13 @@ use notification_stubs::{
     notification_handler_client::NotificationHandlerClient, SendNotificationRequest,
 };
 use std::env;
+use std::sync::Arc;
+use std::sync::RwLock;
 use tonic::{transport::Server, Request, Response, Status};
 use transaction_stubs::transaction_handler_server::{TransactionHandler, TransactionHandlerServer};
 use transaction_stubs::{
-    ConfirmRequestRequest, ConfirmRequestResponse, RequestMoneyRequest, RequestMoneyResponse,
-    SendPaymentRequest, SendPaymentResponse,
+    ConfirmRequestRequest, ConfirmRequestResponse, RejectRequestRequest, RejectRequestResponse,
+    RequestMoneyRequest, RequestMoneyResponse, SendPaymentRequest, SendPaymentResponse,
 };
 use wallet_stubs::wallet_client::WalletClient as WalletHandlerClient;
 
@@ -20,8 +22,34 @@ pub mod wallet_stubs {
     tonic::include_proto!("dubpay.wallet");
 }
 
+#[derive(Debug)]
+pub enum TransactionStatus {
+    Pending,
+    Completed,
+    Rejected,
+}
+
+impl Default for TransactionStatus {
+    fn default() -> Self {
+        TransactionStatus::Pending
+    }
+}
+
 #[derive(Debug, Default)]
-pub struct TransactionService;
+pub struct Transaction {
+    id: String,
+    from: String,
+    to: String,
+    amount: f64,
+    public: bool,
+    description: String,
+    status: TransactionStatus,
+}
+
+#[derive(Debug, Default)]
+pub struct TransactionService {
+    transactions: Arc<RwLock<Transaction>>,
+}
 
 #[tonic::async_trait]
 impl TransactionHandler for TransactionService {
@@ -36,6 +64,13 @@ impl TransactionHandler for TransactionService {
         &self,
         _request: Request<ConfirmRequestRequest>,
     ) -> Result<Response<ConfirmRequestResponse>, Status> {
+        Err(Status::unimplemented("Not yet implemented"))
+    }
+
+    async fn reject_request(
+        &self,
+        _request: Request<RejectRequestRequest>,
+    ) -> Result<Response<RejectRequestResponse>, Status> {
         Err(Status::unimplemented("Not yet implemented"))
     }
 

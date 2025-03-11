@@ -7,6 +7,7 @@ package dubpay.transaction;
 service TransactionHandler {
     rpc RequestMoney (RequestMoneyRequest) returns (RequestMoneyResponse);
     rpc ConfirmRequest (ConfirmRequestRequest) returns (ConfirmRequestResponse);
+    rpc RejectRequest (RejectRequestRequest) returns (RejectRequestResponse);
     rpc SendPayment (SendPaymentRequest) returns (SendPaymentResponse);
 
 }
@@ -31,6 +32,15 @@ message ConfirmRequestRequest {
 }
 
 message ConfirmRequestResponse {
+    string id = 1;
+    string message = 2;
+}
+
+message RejectRequestRequest { 
+    string id = 1;
+}
+
+message RejectRequestResponse {
     string id = 1;
     string message = 2;
 }
