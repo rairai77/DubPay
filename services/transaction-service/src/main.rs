@@ -8,6 +8,7 @@ use transaction_stubs::{
     ConfirmRequestRequest, ConfirmRequestResponse, RequestMoneyRequest, RequestMoneyResponse,
     SendPaymentRequest, SendPaymentResponse,
 };
+use wallet_stubs::wallet_client::WalletClient as WalletHandlerClient;
 
 pub mod transaction_stubs {
     tonic::include_proto!("dubpay.transaction");
@@ -54,13 +55,31 @@ impl TransactionHandler for TransactionService {
             from, to, amount, public, description
         );
 
+        let mut wallet_handler_client = WalletHandlerClient::connect("http://wallet-service:50051")
+            .await
+            .unwrap();
+
+        let transfer_request = tonic::Request::new(wallet_stubs::TransferFundsRequest {
+            sender_id: from.clone(),
+            receiver_id: to.clone(),
+            amount,
+            description,
+        });
+
+        let _ = wallet_handler_client.transfer_funds(transfer_request).await;
+
         let mut notification_handler_client =
             NotificationHandlerClient::connect("http://notification-service:50051")
                 .await
                 .unwrap();
 
+        println! {
+            "Requesting notification service to send notification to {}",
+            to
+        };
+
         let notification_request = tonic::Request::new(SendNotificationRequest {
-            user_id: to,
+            user_id: to.clone(),
             message: format!("You received a payment of {} from {}", amount, from),
             timestamp: Some(prost_types::Timestamp {
                 seconds: 0,
@@ -68,12 +87,22 @@ impl TransactionHandler for TransactionService {
             }),
         });
 
-        let response = notification_handler_client
+        let _ = notification_handler_client
             .send_notification(notification_request)
-            .await
-            .unwrap();
+            .await;
 
-        println!("Notification response: {:?}", response.into_inner().message);
+        let notification_request = tonic::Request::new(SendNotificationRequest {
+            user_id: from.clone(),
+            message: format!("You sent a payment of {} from {}", amount, to),
+            timestamp: Some(prost_types::Timestamp {
+                seconds: 0,
+                nanos: 0,
+            }),
+        });
+
+        let _ = notification_handler_client
+            .send_notification(notification_request)
+            .await;
 
         return Ok(Response::new(SendPaymentResponse {
             id: "1".to_string(),
