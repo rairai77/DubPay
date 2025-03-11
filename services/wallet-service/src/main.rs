@@ -1,3 +1,5 @@
+use std::env;
+
 use tonic::{transport::Server, Request, Response, Status};
 
 use dubpay::wallet_server::{Wallet, WalletServer};
@@ -62,7 +64,8 @@ impl Wallet for WalletService {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let addr = "[::1]:50053".parse()?;
+    let port = env::var("SERVICE_PORT").unwrap_or_else(|_| "50053".to_string());
+    let addr = format!("0.0.0.0:{}", port).parse()?;
     let service = WalletService;
 
     println!("Wallet Service listening on {}", addr);
