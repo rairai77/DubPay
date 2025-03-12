@@ -3,6 +3,10 @@ name = "wallet-service"
 version = "0.1.0"
 edition = "2021"
 
+[[bin]]
+name = "wallet_client"
+path = "src/client.rs"
+
 [dependencies]
 tokio.workspace = true
 tonic.workspace = true
