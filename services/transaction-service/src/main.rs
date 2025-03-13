@@ -1,7 +1,8 @@
 use dubpay::transaction_handler_server::{TransactionHandler, TransactionHandlerServer};
 use dubpay::{
     notification_handler_client, ConfirmRequestRequest, ConfirmRequestResponse,
-    RequestMoneyRequest, RequestMoneyResponse, SendPaymentRequest, SendPaymentResponse,
+    RejectRequestRequest, RejectRequestResponse, RequestMoneyRequest, RequestMoneyResponse,
+    SendPaymentRequest, SendPaymentResponse,
 };
 use std::env;
 use tonic::{transport::Server, Request, Response, Status};
@@ -27,6 +28,13 @@ impl TransactionHandler for TransactionService {
         &self,
         _request: Request<ConfirmRequestRequest>,
     ) -> Result<Response<ConfirmRequestResponse>, Status> {
+        Err(Status::unimplemented("Not yet implemented"))
+    }
+
+    async fn reject_request(
+        &self,
+        _request: Request<RejectRequestRequest>,
+    ) -> Result<Response<RejectRequestResponse>, Status> {
         Err(Status::unimplemented("Not yet implemented"))
     }
 
